@@ -12,6 +12,7 @@ async function bootstrap() {
     .setTitle('Padaria Blue')
     .setDescription('API responsavel pela gestão da Padaria da Blue')
     .setVersion('1.0.0')
+    .addTag('users')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
