@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 
 @ApiTags('users')
@@ -8,6 +8,9 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
+  @ApiOperation({
+    summary: 'Lista de todos usuários';
+  })
   getAll() {
     return this.usersService.getAll();
   }
