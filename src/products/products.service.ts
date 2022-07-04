@@ -8,8 +8,8 @@ import { Product } from './entities/product.entity';
 export class ProductsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(dto: CreateProductDto) {
-    return 'This action adds a new product';
+  create(dto: CreateProductDto): Promise<Product> {
+    return this.prisma.product.create({ data: dto });
   }
 
   findAll(): Promise<Product[]> {
