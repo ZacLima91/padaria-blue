@@ -16,8 +16,8 @@ export class ProductsService {
     return this.prisma.product.findMany();
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} product`;
+  findOne(id: string): Promise<Product> {
+    return this.prisma.product.findUnique({ where: { id } });
   }
 
   update(id: string, dto: UpdateProductDto) {
