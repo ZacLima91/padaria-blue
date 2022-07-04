@@ -24,7 +24,7 @@ export class ProductsService {
     return this.prisma.product.update({ where: { id }, data: dto });
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} product`;
+  remove(id: string): Promise<Product> {
+    return this.prisma.product.delete({ where: { id } });
   }
 }
