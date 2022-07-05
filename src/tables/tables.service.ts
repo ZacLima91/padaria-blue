@@ -2,13 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateTableDto } from './dto/create-table.dto';
 import { UpdateTableDto } from './dto/update-table.dto';
+import { Table } from './entities/table.entity';
 
 @Injectable()
 export class TablesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(dto: CreateTableDto) {
-    return 'This action adds a new table';
+  create(dto: CreateTableDto): Promise<Table> {
+    return this.prisma.table.create({ data: dto });
   }
 
   findAll() {
