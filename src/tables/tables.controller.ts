@@ -32,7 +32,7 @@ export class TablesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateTableDto) {
+  update(@Param('id') id: string, @Body() dto: UpdateTableDto): Promise<Table> {
     return this.tablesService.update(id, dto);
   }
 

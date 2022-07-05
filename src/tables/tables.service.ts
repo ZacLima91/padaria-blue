@@ -20,8 +20,11 @@ export class TablesService {
     return this.prisma.table.findUnique({ where: { id } });
   }
 
-  update(id: string, dto: UpdateTableDto) {
-    return `This action updates a #${id} table`;
+  update(id: string, dto: UpdateTableDto): Promise<Table> {
+    return this.prisma.table.update({
+      where: { id },
+      data: dto,
+    });
   }
 
   remove(id: string) {
