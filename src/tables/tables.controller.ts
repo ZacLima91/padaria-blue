@@ -22,7 +22,7 @@ export class TablesController {
   }
 
   @Get()
-  findAll() {
+  findAll(): Promise<Table[]> {
     return this.tablesService.findAll();
   }
 

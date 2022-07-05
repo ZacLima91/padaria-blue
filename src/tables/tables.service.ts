@@ -12,8 +12,8 @@ export class TablesService {
     return this.prisma.table.create({ data: dto });
   }
 
-  findAll() {
-    return `This action returns a #${id} table`;
+  findAll(): Promise<Table[]> {
+    return this.prisma.table.findMany();
   }
 
   findOne(id: string) {
