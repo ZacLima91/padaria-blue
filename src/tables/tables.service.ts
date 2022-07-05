@@ -16,8 +16,8 @@ export class TablesService {
     return this.prisma.table.findMany();
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} table`;
+  findOne(id: string): Promise<Table> {
+    return this.prisma.table.findUnique({ where: { id } });
   }
 
   update(id: string, dto: UpdateTableDto) {

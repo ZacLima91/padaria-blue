@@ -27,7 +27,7 @@ export class TablesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string): Promise<Table> {
     return this.tablesService.findOne(id);
   }
 
