@@ -37,7 +37,7 @@ export class CreateProductDto {
   @IsUUID()
   @ApiProperty({
     description: 'Id da categoria do produto',
-    example: 'gfdsgfdgfdgdf',
+    example: 'acb989bb-c9ee-4d13-bf8a-6dab15cce935',
   })
   categoryId: string;
 }
