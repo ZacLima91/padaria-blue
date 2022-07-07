@@ -1,13 +1,10 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entity/users.entity';
 import * as bcrypt from 'bcryptjs';
 import { UpdateUserDto } from './dto/updated-user.dto';
+import { handleConstrainUniqueError } from 'src/utils/handle-error-unique.util';
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
@@ -19,9 +16,7 @@ export class UsersService {
       email: dto.email,
       password: hashedPassword,
     };
-    return this.prisma.user
-      .create({ data })
-      .catch(this.handleConstrainUniqueError);
+    return this.prisma.user.create({ data }).catch(handleConstrainUniqueError);
   }
 
   findAll(): Promise<User[]> {
@@ -38,15 +33,6 @@ export class UsersService {
     return user;
   }
 
-  handleConstrainUniqueError(error: Error): never {
-    const splitedMessage = error.message.split('`');
-
-    const errorMessage = `Entrada '${
-      splitedMessage[splitedMessage.length - 2]
-    }' não está respeitando a constraint UNIQUE`;
-    throw new UnprocessableEntityException(errorMessage);
-  }
-
   findOne(id: string) {
     return this.verifyIdAndReturnUser(id);
   }
@@ -55,7 +41,7 @@ export class UsersService {
     await this.verifyIdAndReturnUser(id);
     return this.prisma.user
       .update({ where: { id }, data: dto })
-      .catch(this.handleConstrainUniqueError);
+      .catch(handleConstrainUniqueError);
   }
 
   async remove(id: string): Promise<User> {
