@@ -7,6 +7,13 @@ import { UpdateUserDto } from './dto/updated-user.dto';
 import { handleConstrainUniqueError } from 'src/utils/handle-error-unique.util';
 @Injectable()
 export class UsersService {
+  private userSelect = {
+    id: true,
+    name: true,
+    email: true,
+    updatedAt: true,
+    createdAt: true,
+  };
   constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreateUserDto): Promise<User | void> {
@@ -16,15 +23,20 @@ export class UsersService {
       email: dto.email,
       password: hashedPassword,
     };
-    return this.prisma.user.create({ data }).catch(handleConstrainUniqueError);
+    return this.prisma.user
+      .create({ data, select: this.userSelect })
+      .catch(handleConstrainUniqueError);
   }
 
   findAll(): Promise<User[]> {
-    return this.prisma.user.findMany();
+    return this.prisma.user.findMany({ select: this.userSelect });
   }
 
   async verifyIdAndReturnUser(id: string): Promise<User> {
-    const user: User = await this.prisma.user.findUnique({ where: { id } });
+    const user: User = await this.prisma.user.findUnique({
+      where: { id },
+      select: this.userSelect,
+    });
 
     if (!user) {
       throw new NotFoundException(`Entrada de id ${id} não encontrada`);
@@ -40,12 +52,12 @@ export class UsersService {
   async update(id: string, dto: UpdateUserDto): Promise<User | void> {
     await this.verifyIdAndReturnUser(id);
     return this.prisma.user
-      .update({ where: { id }, data: dto })
+      .update({ where: { id }, data: dto, select: this.userSelect })
       .catch(handleConstrainUniqueError);
   }
 
   async remove(id: string): Promise<User> {
     await this.verifyIdAndReturnUser(id);
-    return this.prisma.user.delete({ where: { id } });
+    return this.prisma.user.delete({ where: { id }, select: this.userSelect });
   }
 }
