@@ -8,7 +8,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { User } from '@prisma/client';
+import { User } from './entity/users.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/updated-user.dto';
 import { UsersService } from './users.service';
