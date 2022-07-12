@@ -30,7 +30,9 @@ export class UsersService {
   }
 
   findAll(): Promise<User[]> {
-    return this.prisma.user.findMany({ select: this.userSelect });
+    return this.prisma.user.findMany({
+      select: { ...this.userSelect, favorites: true },
+    });
   }
 
   async verifyIdAndReturnUser(id: string): Promise<User> {

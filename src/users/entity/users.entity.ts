@@ -1,3 +1,5 @@
+import { Favorite } from 'src/favorites/entities/favorites.entity';
+
 export class User {
   id: string;
   name: string;
@@ -5,4 +7,5 @@ export class User {
   password?: string;
   createdAt: Date;
   updatedAt: Date;
+  favorites?: Favorite[];
 }
