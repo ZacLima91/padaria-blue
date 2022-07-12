@@ -1,10 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { User } from 'src/users/entity/users.entity';
 import { handleConstrainUniqueError } from 'src/utils/handle-error-unique.util';
 import { CreateProductDto } from './dto/create-product.dto';
-import { FavoriteProductDto } from './dto/favorite-product.dto';
+import { FavoriteProductDto } from '../favorites/dto/favorite.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
+import { Favorite } from 'src/favorites/entities/favorites.entity';
 
 @Injectable()
 export class ProductsService {
@@ -47,7 +49,27 @@ export class ProductsService {
     await this.verifyIdAndReturnUser(id);
     return this.prisma.product.delete({ where: { id } });
   }
-  favorite(dto: FavoriteProductDto) {
+  async favorite(dto: FavoriteProductDto): Promise<Favorite> {
+    const user: User = await this.prisma.user.findUnique({
+      where: { id: dto.userId },
+    });
+    if (!user) {
+      throw new NotFoundException(`Entrada de id ${dto.userId} não encontrada`);
+    }
+
+    const product: Product = await this.prisma.product.findUnique({
+      where: { name: dto.productName },
+    });
+
+    if (!product) {
+      throw new NotFoundException(
+        `Produto de nome '${dto.productName}' não encontrado`,
+      );
+    }
     return this.prisma.favorite.create({ data: dto });
+  }
+
+  disfavoring(id: string) {
+    return this.prisma.favorite.delete({ where: { id } });
   }
 }
