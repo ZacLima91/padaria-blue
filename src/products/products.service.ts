@@ -69,7 +69,8 @@ export class ProductsService {
     return this.prisma.favorite.create({ data: dto });
   }
 
-  disfavoring(id: string) {
+  async disfavoring(id: string) {
+    await this.verifyIdAndReturnUser(id);
     return this.prisma.favorite.delete({ where: { id } });
   }
 

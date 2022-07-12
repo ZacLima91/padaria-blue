@@ -48,7 +48,8 @@ export class UsersService {
     return user;
   }
 
-  findFavoriteProdusts(id: string): Promise<Favorite[]> {
+  async findFavoriteProdusts(id: string): Promise<Favorite[]> {
+    await this.verifyIdAndReturnUser(id);
     return this.prisma.favorite.findMany({
       where: { userId: id },
       select: { productName: true },
