@@ -29,6 +29,11 @@ export class OrdersService {
         id: true,
         tableNumber: true,
         userId: true,
+        user: {
+          select: {
+            name: true,
+          },
+        },
         products: {
           select: {
             name: true,
@@ -39,10 +44,43 @@ export class OrdersService {
   }
 
   findAll() {
-    return `This action returns all orders`;
+    return this.prisma.order.findMany({
+      select: {
+        id: true,
+        tableNumber: true,
+        userId: true,
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        products: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
   }
 
   findOne(id: string) {
-    return `This action returns a #${id} order`;
+    return this.prisma.order.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        tableNumber: true,
+        userId: true,
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        products: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
   }
 }
